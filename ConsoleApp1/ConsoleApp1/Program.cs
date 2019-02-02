@@ -12,96 +12,81 @@
 5. Пока что просто вывести
 */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp1
 {
     enum Category
     {
-        FirstQ = 1,
-        SecondQ = 2,
-        ThirdQ = 3,
-        FourthQ = 4,
-        ZeroP = 0
+        ZeroP,
+        FirstQ,
+        SecondQ,
+        ThirdQ,
+        FourthQ
     }
 
     class Point
     {
-        public int x;
-        public int y;
-        public Category category;
-        public int group;
-        public double length;
+        public int X;
+        public int Y;
+        public Category Category;
+        public int Group;
+        public double Length;
 
         public Point(int xx, int yy)
         {
-            x = xx;
-            y = yy;
+            X = xx;
+            Y = yy;
 
-            if ((x == 500) && (y == 500))
+            if ((X == 500) && (Y == 500))
             {
-                group = 0;
+                Group = 0;
             }
-            else if ((x <= 500) && (y <= 1000))
+            else if ((X <= 500) && (Y <= 1000))
             {
-                group = 1;
+                Group = 1;
             }
-            else if ((x >= 500) && (y <= 1000))
+            else if ((X >= 500) && (Y <= 1000))
             {
-                group = 2;
+                Group = 2;
             }
 
-            if ((x >= 0 && x < 500) && (y >= 0 && y < 500))
+            if ((X >= 0 && X < 500) && (Y >= 0 && Y < 500))
             {
-                category = Category.ThirdQ;
+                Category = Category.ThirdQ;
             }
-            else if ((x > 500 && x <= 1000) && (y >= 0 && y < 500))
+            else if ((X > 500 && X <= 1000) && (Y >= 0 && Y < 500))
             {
-                category = Category.FourthQ;
+                Category = Category.FourthQ;
             }
-            else if ((x > 500 && x <= 1000) && (y > 500 && y <= 1000))
+            else if ((X > 500 && X <= 1000) && (Y > 500 && Y <= 1000))
             {
-                category = Category.FirstQ;
+                Category = Category.FirstQ;
             }
-            else if ((x >= 0 && x < 500) && (y > 500 && y <= 1000))
+            else if ((X >= 0 && X < 500) && (Y > 500 && Y <= 1000))
             {
-                category = Category.SecondQ;
+                Category = Category.SecondQ;
             }
-            else if (x == 500 && y == 500)
+            else if (X == 500 && Y == 500)
             {
-                category = Category.ZeroP;
+                Category = Category.ZeroP;
             }
         }
 
-        public double Length(Point obj)
+        public void SetLength(double ll)
         {
-            length = Math.Sqrt(Math.Pow(Math.Abs(x - obj.x), 2) + Math.Pow(Math.Abs(y - obj.y), 2));
-            return length;
+            Length = ll;
         }
     }
 
     class Program
     {
-        static void BubbleSort(Point[] objs)
+        static double GetLength(Point obj1, Point obj2)
         {
-            Point temp;
-
-            for (int i = 0; i < objs.Length; i++)
-            {
-                for (int j = i + 1; j < objs.Length; j++)
-                {
-                    if (objs[i].length > objs[j].length)
-                    {
-                        temp = objs[i];
-                        objs[i] = objs[j];
-                        objs[j] = temp;
-                    }
-                }
-            }
-
-            foreach (var i in objs)
-            {
-                Console.WriteLine($"x: {i.x}, y: {i.y} => {i.length}");
-            }
+            var Length = Math.Sqrt(Math.Pow(Math.Abs(obj1.X - obj2.X), 2) + Math.Pow(Math.Abs(obj1.Y - obj2.Y), 2));
+            obj1.SetLength(Length);
+            return Length;
         }
 
         static void Main(string[] args)
@@ -110,29 +95,33 @@ namespace ConsoleApp1
 
             Console.WriteLine("Случайные точки:");
 
-            Point[] p = new Point[5];
+            var p = new List<Point>();
             for (int i = 0; i < 5; i++)
             {
-                p[i] = new Point(rand.Next(0, 1000), rand.Next(0,1000));
-                Console.WriteLine($"x = {p[i].x}, y = {p[i].y}, group = {p[i].group}, category = {p[i].category}");
+                p.Add(new Point(rand.Next(0, 1000), rand.Next(0, 1000)));
+                Console.WriteLine($"x = {p[i].X}, y = {p[i].Y}, group = {p[i].Group}, category = {p[i].Category}");
             }
-            Console.WriteLine("");
+            Console.WriteLine();
 
             var zp = new Point(500, 500);
 
             Console.WriteLine("Нулевая точка:");
-            Console.WriteLine($"x = {zp.x}, y = {zp.y}, group = {zp.group}, category = {zp.category}");
-            Console.WriteLine("");
+            Console.WriteLine($"x = {zp.X}, y = {zp.Y}, group = {zp.Group}, category = {zp.Category}");
+            Console.WriteLine();
 
             Console.WriteLine("Расстояние до нулевой точки:");
             foreach (var i in p)
             {
-                Console.WriteLine($"x: {i.x}, y: {i.y} => {i.Length(zp)}");
+                Console.WriteLine($"x: {i.X}, y: {i.Y} => {GetLength(i, zp)}");
             }
-            Console.WriteLine("");
+            Console.WriteLine();
 
             Console.WriteLine("Сортировка:");
-            BubbleSort(p);
+            var result = p.OrderBy(x => x.Length);
+            foreach (var i in result)
+            {
+                Console.WriteLine($"x: {i.X}, y: {i.Y} => {i.Length}");
+            }
 
             Console.ReadKey();
         }
