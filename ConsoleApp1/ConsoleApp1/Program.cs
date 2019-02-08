@@ -30,6 +30,7 @@ namespace ConsoleApp1
 
     public class Point
     {
+        public int ID;
         public int X;
         public int Y;
         public Category Category;
@@ -95,7 +96,7 @@ namespace ConsoleApp1
             {
                 var xx = rand.Next(0, 1000);
                 var yy = rand.Next(0, 1000);
-                p.Add(new Point { X = xx, Y = yy, Group = SetGroup(xx, yy), Category = SetCategory(xx, yy) });
+                p.Add(new Point { ID = i+1, X = xx, Y = yy, Group = SetGroup(xx, yy), Category = SetCategory(xx, yy) });
                 Console.WriteLine($"x = {p[i].X}, y = {p[i].Y}, group = {p[i].Group}, category = {p[i].Category}");
             }
             Console.WriteLine();
