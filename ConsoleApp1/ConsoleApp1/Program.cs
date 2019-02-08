@@ -10,6 +10,8 @@
 4. Затем сортировать список точек по увеличению дистанции до центральной точки
 
 5. Пока что просто вывести
+
++ 6. Так что сделай добавление точек в базу
 */
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ using System.Linq;
 
 namespace ConsoleApp1
 {
-    enum Category
+    public enum Category
     {
         ZeroP,
         FirstQ,
@@ -26,67 +28,60 @@ namespace ConsoleApp1
         FourthQ
     }
 
-    class Point
+    public class Point
     {
         public int X;
         public int Y;
         public Category Category;
         public int Group;
         public double Length;
-
-        public Point(int xx, int yy)
-        {
-            X = xx;
-            Y = yy;
-
-            if ((X == 500) && (Y == 500))
-            {
-                Group = 0;
-            }
-            else if ((X <= 500) && (Y <= 1000))
-            {
-                Group = 1;
-            }
-            else if ((X >= 500) && (Y <= 1000))
-            {
-                Group = 2;
-            }
-
-            if ((X >= 0 && X < 500) && (Y >= 0 && Y < 500))
-            {
-                Category = Category.ThirdQ;
-            }
-            else if ((X > 500 && X <= 1000) && (Y >= 0 && Y < 500))
-            {
-                Category = Category.FourthQ;
-            }
-            else if ((X > 500 && X <= 1000) && (Y > 500 && Y <= 1000))
-            {
-                Category = Category.FirstQ;
-            }
-            else if ((X >= 0 && X < 500) && (Y > 500 && Y <= 1000))
-            {
-                Category = Category.SecondQ;
-            }
-            else if (X == 500 && Y == 500)
-            {
-                Category = Category.ZeroP;
-            }
-        }
-
-        public void SetLength(double ll)
-        {
-            Length = ll;
-        }
     }
 
     class Program
     {
-        static double GetLength(Point obj1, Point obj2)
+        static double SetLength(Point obj)
         {
-            var Length = Math.Sqrt(Math.Pow(Math.Abs(obj1.X - obj2.X), 2) + Math.Pow(Math.Abs(obj1.Y - obj2.Y), 2));
-            obj1.SetLength(Length);
-            return Length;
+            return Math.Sqrt(Math.Pow(Math.Abs(obj.X - 500), 2) + Math.Pow(Math.Abs(obj.Y - 500), 2));
+        }
+
+        static int SetGroup(int xx, int yy)
+        {
+            if ((xx == 500) && (yy == 500))
+            {
+                return 0;
+            }
+            else if ((xx <= 500) && (yy <= 1000))
+            {
+                return 1;
+            }
+            else 
+            {
+                return 2;
+            }
+        }
+
+        static Category SetCategory(int xx, int yy)
+        {
+            if ((xx >= 0 && xx < 500) && (yy >= 0 && yy < 500))
+            {
+                return Category.ThirdQ;
+            }
+            else if ((xx > 500 && xx <= 1000) && (yy >= 0 && yy < 500))
+            {
+                return Category.FourthQ;
+            }
+            else if ((xx > 500 && xx <= 1000) && (yy > 500 && yy <= 1000))
+            {
+                return Category.FirstQ;
+            }
+            else if ((xx >= 0 && xx < 500) && (yy > 500 && yy <= 1000))
+            {
+                return Category.SecondQ;
+            }
+            else 
+            {
+                return Category.ZeroP;
+            }
         }
 
         static void Main(string[] args)
@@ -98,12 +93,14 @@ namespace ConsoleApp1
             var p = new List<Point>();
             for (int i = 0; i < 5; i++)
             {
-                p.Add(new Point(rand.Next(0, 1000), rand.Next(0, 1000)));
+                var xx = rand.Next(0, 1000);
+                var yy = rand.Next(0, 1000);
+                p.Add(new Point { X = xx, Y = yy, Group = SetGroup(xx, yy), Category = SetCategory(xx, yy) });
                 Console.WriteLine($"x = {p[i].X}, y = {p[i].Y}, group = {p[i].Group}, category = {p[i].Category}");
             }
             Console.WriteLine();
 
-            var zp = new Point(500, 500);
+            var zp = new Point { X = 500, Y = 500, Group = SetGroup(500, 500), Category = SetCategory(500, 500) };
 
             Console.WriteLine("Нулевая точка:");
             Console.WriteLine($"x = {zp.X}, y = {zp.Y}, group = {zp.Group}, category = {zp.Category}");
@@ -112,7 +109,8 @@ namespace ConsoleApp1
             Console.WriteLine("Расстояние до нулевой точки:");
             foreach (var i in p)
             {
-                Console.WriteLine($"x: {i.X}, y: {i.Y} => {GetLength(i, zp)}");
+                i.Length = SetLength(i);
+                Console.WriteLine($"x: {i.X}, y: {i.Y} => {i.Length}");
             }
             Console.WriteLine();
 
@@ -121,6 +119,25 @@ namespace ConsoleApp1
             foreach (var i in result)
             {
                 Console.WriteLine($"x: {i.X}, y: {i.Y} => {i.Length}");
+            }
+
+            using (PointsContext db = new PointsContext())
+            {
+                /*foreach (var i in p)
+                {
+                    db.DB_Points.Add(i);
+                }*/
+                db.Points.AddRange(p);   //виснет туть. 
+                db.SaveChanges();
+
+                Console.WriteLine("Данные сохранены в базе данных.");
+                Console.WriteLine();
+
+                Console.WriteLine("Объекты БД:");
+                foreach (var i in db.Points)
+                {
+                    Console.WriteLine($"{i.X}, {i.Y}: {i.Length}");
+                }
             }
 
             Console.ReadKey();

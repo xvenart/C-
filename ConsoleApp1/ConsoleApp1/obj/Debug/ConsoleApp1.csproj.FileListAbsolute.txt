@@ -12,3 +12,9 @@ D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csprojAssem
 D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csproj.CoreCompileInputs.cache
 D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.exe
 D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.pdb
+D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.dll
+D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.SqlServer.dll
+D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.xml
+D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.SqlServer.xml
+D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csproj.CopyComplete
+D:\GitKraken\Cu-LLIapn\ConsoleApp1\ConsoleApp1\bin\Debug\ru\EntityFramework.resources.dll
