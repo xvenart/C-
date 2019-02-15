@@ -1,17 +1,12 @@
-﻿/*
-1. У тебя генерируются 300+ точек с случайными координатами x от 0 до 1000, y от 0 до 1000, они должны относиться
-к одной из четырех категорий (Категории прописать в enum'е) и к одной из двух групп (пусть 1 и 3 категории 
-относятся к первой группе, 2 и 4 - ко второй) 
+﻿/*  
+    Юнит-тесты.
 
-2. Создается центральная точка с координатами (500, 500), третьей (нулевой) группой и пятой (нулевой) категорией
+    На этот метод (SetCategory)
+    На пограничные значения и правильное определение групп
 
-3. Для каждой точки нужно будет считать расстояние до центральной точки
+    Главное: отталкивайся при тестировании от того, как должно быть, а не как будет при текущем коде
 
-4. Затем сортировать список точек по увеличению дистанции до центральной точки
-
-5. Пока что просто вывести
-
-+ 6. Так что сделай добавление точек в базу
+    И пограничные значения все, если что
 */
 
 using System;
@@ -20,32 +15,36 @@ using System.Linq;
 
 namespace EF_Practice
 {
-    class Program
+    public class Program
     {
-        static double SetLength(Point obj)
+        public static double SetLength(Point obj)
         {
             return Math.Sqrt(Math.Pow(obj.X - 500, 2) + Math.Pow(obj.Y - 500, 2));
         }
 
-        static int SetGroup(int xx, int yy)
+        public static int SetGroup(int xx, int yy)
         {
             return ((xx == 500 && yy == 500) ? 0 : (xx <= 500 && yy <= 1000) ? 1 : 2);
         }
 
-        static Category SetCategory(int xx, int yy)
+        public static Category SetCategory(int xx, int yy)
         {
             if (xx < 0 || xx > 1000 || yy < 0 || yy > 1000)
             {
                 throw new ArgumentOutOfRangeException("X и/или Y выходит за границы интервалов.");
             }
 
-            return ((xx < 500 &&  yy < 500) ? Category.ThirdQ :
-                (xx > 500 && yy < 500) ? Category.FourthQ :
-                (xx > 500 && yy > 500) ? Category.FirstQ :
-                (xx < 500 && yy > 500) ? Category.SecondQ : Category.ZeroP);
+            if (xx == 500 && yy == 500)
+            {
+                return Category.ZeroP;
+            }
+            else
+            {
+                return ((xx <= 500) ? (yy <= 500 ? Category.ThirdQ : Category.SecondQ) : (yy <= 500 ? Category.FourthQ : Category.FirstQ));
+            }
         }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
@@ -73,6 +72,7 @@ namespace EF_Practice
                 Console.WriteLine("Нулевая точка:");
                 Console.WriteLine($"x = {zp.X}, y = {zp.Y}, group = {zp.Group}, category = {zp.Category}");
                 Console.WriteLine();
+
 
                 Console.WriteLine("Расстояние до нулевой точки:");
                 foreach (var i in p)
@@ -116,7 +116,10 @@ namespace EF_Practice
             {
                 Console.WriteLine($"Ошибка: {e.Message}");
             }
-            Console.Read();
+            finally
+            {
+                Console.Read();
+            }
         }
     }
 }
